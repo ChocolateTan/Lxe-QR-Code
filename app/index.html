@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>樓小二QR Code</title>
+    <!--<script type="text/javascript">-->
+    <!--if ('serviceWorker' in navigator) {-->
+    <!--navigator.serviceWorker-->
+    <!--.register('./service-worker.js')-->
+    <!--.then(function() { console.log('Service Worker Registered'); });-->
+    <!--}-->
+    <!--</script>-->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+    <script type="text/javascript" src="./scripts/qrcode.js"></script>
+    <script type="text/javascript">
+        function firstLoad() {
+
+            var input1 = getCookie('input1');
+            var input2 = getCookie('input2');
+            var input3 = Date.parse(new Date());
+            var input4 = getCookie('input4');
+
+            if (input1 != null && input2 != null && input3 != null && input4 != null) {
+                new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+            } else {
+                alert('請完善 QR Code 資料');
+            }
+        }
+        //读取cookies
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+            if (arr = document.cookie.match(reg))
+
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+    </script>
+
+</head>
+<body onload="firstLoad()">
+<div id="qrcode" align="center"></div>
+<p align="center"><a href="createQRCode.html">修改QR Code</a></p>
+</body>
+</html>

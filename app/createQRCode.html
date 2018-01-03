@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>樓小二QR Code</title>
+    <script type="text/javascript">
+        function onClickSave() {
+            var input1 = document.getElementById('input1');
+            var input2 = document.getElementById('input2');
+            var input4 = document.getElementById('input4');
+
+//            alert(input1.value);
+//            if(input1.tex)
+            setCookie('input1', input1.value);
+            setCookie('input2', input2.value);
+            setCookie('input4', input4.value);
+
+            alert('保存成功')
+        }
+        //写cookies
+        function setCookie(name, value) {
+            var Days = 365;
+            var exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        //读取cookies
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+            if (arr = document.cookie.match(reg))
+
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+        function firstLoad() {
+
+            var input1 = document.getElementById('input1');
+            var input2 = document.getElementById('input2');
+            var input4 = document.getElementById('input4');
+
+            input1.value = getCookie('input1');
+            input2.value = getCookie('input2');
+            input4.value = getCookie('input4');
+        }
+    </script>
+</head>
+<body onload="firstLoad()">
+<p>Lou Xiao Er QR Code</p>
+<p>格式 1XXXXXX|電話|時間|4XXXXXXXXXX</p>
+<p><input type="text" id="input1">（1XXXXXX）</p>
+<p><input type="text" id="input2">（電話）</p>
+<p><input type="text" id="input4">（3XXXXXXXXXX）</p>
+<p><input type="button" value="保存" onclick="onClickSave()"></p>
+</body>
+</html>
