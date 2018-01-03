@@ -33,7 +33,8 @@
             var input4 = getCookie('input4');
 
             if (input1 != null && input2 != null && input3 != null && input4 != null) {
-                new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+                var qrString = input1 + '|' + input2 + '|' + input3 + '|' + input4;
+                new QRCode(document.getElementById("qrcode"), qrString);
             } else {
                 alert('請完善 QR Code 資料');
             }
