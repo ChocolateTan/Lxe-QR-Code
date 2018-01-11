@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>樓小二QR Code</title>
+    <script type="text/javascript" src="/scripts/decoder.js"></script>
+    <script type="text/javascript" src="/qrcode/qrcode2.js"></script>
+    <script type="text/javascript" src="/qrcode/grid.js"></script>
+    <script type="text/javascript" src="/qrcode/version.js"></script>
+    <script type="text/javascript" src="/qrcode/detector.js"></script>
+    <script type="text/javascript" src="/qrcode/formatinf.js"></script>
+    <script type="text/javascript" src="/qrcode/errorlevel.js"></script>
+    <script type="text/javascript" src="/qrcode/bitmat.js"></script>
+    <script type="text/javascript" src="/qrcode/datablock.js"></script>
+    <script type="text/javascript" src="/qrcode/bmparser.js"></script>
+    <script type="text/javascript" src="/qrcode/datamask.js"></script>
+    <script type="text/javascript" src="/qrcode/rsdecoder.js"></script>
+    <script type="text/javascript" src="/qrcode/gf256poly.js"></script>
+    <script type="text/javascript" src="/qrcode/gf256.js"></script>
+    <script type="text/javascript" src="/qrcode/decoder.js"></script>
+    <script type="text/javascript" src="/qrcode/findpat.js"></script>
+    <script type="text/javascript" src="/qrcode/alignpat.js"></script>
+    <script type="text/javascript" src="/qrcode/databr.js"></script>
+    <script type="text/javascript">
+        function onClickSave() {
+            var input1 = document.getElementById('input1');
+            var input2 = document.getElementById('input2');
+            var input4 = document.getElementById('input4');
+
+            setCookie('input1', input1.value);
+            setCookie('input2', input2.value);
+            setCookie('input4', input4.value);
+
+            alert('保存成功')
+        }
+        //写cookies
+        function setCookie(name, value) {
+            var Days = 365;
+            var exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        //读取cookies
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+            if (arr = document.cookie.match(reg))
+
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+        function firstLoad() {
+
+            var input1 = document.getElementById('input1');
+            var input2 = document.getElementById('input2');
+            var input4 = document.getElementById('input4');
+
+            input1.value = getCookie('input1');
+            input2.value = getCookie('input2');
+            input4.value = getCookie('input4');
+        }
+        // 检测是否支持File API
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            //  支持
+        } else {
+            alert('該瀏覽器不不支持上傳文件，請使用手動輸入信息');
+        }
+        function showQRcode(input) {
+            var objUrl = input.value;
+            console.log("objUrl = " + objUrl);
+            if (objUrl) {
+                var reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);//转化成base64数据类型
+                reader.onload = function (e) {
+                    drawToCanvas(this.result);
+                }
+            }
+        }
+        function drawToCanvas(imgData) {
+            var cvs = document.querySelector('#qr-canvas');
+            cvs.width = 400;
+            cvs.height = 400;
+            var ctx = cvs.getContext('2d');
+            var img = new Image;
+            img.src = imgData;
+            img.onload = function () {//必须onload之后再画
+                ctx.drawImage(img, 0, 0, 400, 400);
+                strDataURI = cvs.toDataURL();//获取canvas base64数据
+            }
+
+            qrcode.callback = function (data) {
+                alert(data);
+            }
+            qrcode.decode();
+        }
+    </script>
+</head>
+<body onload="firstLoad()">
+<p>Lou Xiao Er QR Code</p>
+<p>打開樓小二，讀取二維碼內容，內容格式 1XXXXXX|電話|時間|4XXXXXXXXXX</p>
+<p><input type="file" value="上傳圖片，掃描二維碼" name="file0" id="file0" onchange="showQRcode(this)"/></p>
+<p><img src="" id="img_qrcode"></p>
+<p>
+    <canvas id="qr-canvas"></canvas>
+</p>
+<p><input type="text" id="input1">（1XXXXXX）</p>
+<p><input type="text" id="input2">（電話）</p>
+<p><input type="text" id="input4">（3XXXXXXXXXX）</p>
+<p><input type="button" value="保存" onclick="onClickSave()"></p>
+</body>
+</html>
